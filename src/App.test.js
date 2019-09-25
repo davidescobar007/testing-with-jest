@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import App, { Todo } from './App';
+import App, { Todo, TodoForm } from './App';
 
 
-//to configure enzyme
+//to configure enzyme ***its really important doing this
 configure({ adapter: new Adapter() });
 
 describe("App", () => {
@@ -50,6 +50,20 @@ describe("App", () => {
       expect(completeTodo.mock.calls).toEqual([])
     });
 
+  })
+
+  describe("TodoForm", () => {
+    it('calling addTodo when form has a value', () => {
+      const addTodo = jest.fn();
+      const wrapper = shallow(
+        <TodoForm
+          addTodo={addTodo}
+        />
+      );
+      wrapper.find('input').simulate('change', { target: { value: 'mi nuevo todo' } });
+      wrapper.find('form').simulate('submit', { preventDefault: () => { } })
+      expect(addTodo.mock.calls).toEqual([['mi nuevo todo']])
+    })
   })
 
 })
