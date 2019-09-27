@@ -39,7 +39,8 @@ export function TodoForm({ addTodo }) {
   );
 }
 
-function App() {
+
+export const useTodos = () => {
   const [todos, setTodos] = useState([
     {
       text: "Todo 1",
@@ -71,7 +72,11 @@ function App() {
     newTodos.splice(index, 1);
     setTodos(newTodos);
   };
+return { todos, completeTodo, addTodo, removeTodo }
+}
 
+function App() {
+  const { todos, completeTodo, addTodo, removeTodo } = useTodos();
   return (
     <div className="app">
       <div className="todo-list">

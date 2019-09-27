@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import App, { Todo, TodoForm } from './App';
+import App, { Todo, TodoForm, useTodos } from './App';
 
 
 //to configure enzyme ***its really important doing this
@@ -49,7 +49,6 @@ describe("App", () => {
       expect(removeTodo.mock.calls).toEqual([[5]])
       expect(completeTodo.mock.calls).toEqual([])
     });
-
   })
 
   describe("TodoForm", () => {
@@ -63,7 +62,55 @@ describe("App", () => {
       wrapper.find('input').simulate('change', { target: { value: 'mi nuevo todo' } });
       wrapper.find('form').simulate('submit', { preventDefault: () => { } })
       expect(addTodo.mock.calls).toEqual([['mi nuevo todo']])
-    })
-  })
+    });
+  });
 
-})
+  describe("custom hook: useTodos", () => {
+    it('addTodo', () => {
+      const Test = (props) => {
+        const hook = props.hook();
+        return <div{...hook}></div>
+      }
+      const wrapper = shallow(<Test hook={useTodos} />)
+      let props = wrapper.find('div').props();
+      props.addTodo('some test text');
+      props = wrapper.find('div').props();
+      expect(props.todos[0]).toEqual({ text: 'some test text' });
+    });
+
+    it('completeTodo', () => {
+      const Test = (props) => {
+        const hook = props.hook();
+        return <div{...hook}></div>
+      }
+      const wrapper = shallow(<Test hook={useTodos} />)
+      let props = wrapper.find('div').props();
+      props.completeTodo(0);
+      props = wrapper.find('div').props();
+      expect(props.todos[0]).toEqual({ text: "Todo 1", isCompleted: true });
+    });
+
+    it('removeTodo', () => {
+      const Test = (props) => {
+        const hook = props.hook();
+        return <div{...hook}></div>
+      }
+      const wrapper = shallow(<Test hook={useTodos} />)
+      let props = wrapper.find('div').props();
+      props.removeTodo(0);
+      props = wrapper.find('div').props();
+      expect(props.todos).toEqual([
+        {
+          text: "Todo 2",
+          isCompleted: false
+        },
+        {
+          text: "Todo 3",
+          isCompleted: false
+        }
+      ]);
+      console.log(props.todos)
+    });
+  });
+
+});
