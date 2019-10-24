@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import App, { Todo, TodoForm, useTodos } from './App';
 
 
-//to configure enzyme ***its really important doing this
+//to configure enzyme ***it's really important doing this
 configure({ adapter: new Adapter() });
 
 describe("App", () => {
