@@ -62,6 +62,7 @@ export const useTodos = () => {
   };
 
   const completeTodo = index => {
+    debugger;
     const newTodos = [...todos];
     newTodos[index].isCompleted = true;
     setTodos(newTodos);
